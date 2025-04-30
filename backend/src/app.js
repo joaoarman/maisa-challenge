@@ -2,7 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import studentRoutes from './routes/studentRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import exceptionFilter from './middlewares/exceptionFilter.js';
+import { authRequired } from './middlewares/authMiddleware.js';
 
 dotenv.config();
 const app = express();
@@ -12,8 +14,11 @@ const port = process.env.API_PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Public Routes
+app.use('/api/v1/auth', authRoutes);
+
 // Protected Routes
-app.use('/api/v1/students', studentRoutes);
+app.use('/api/v1/students', authRequired, studentRoutes);
 
 // Error handling middleware
 app.use(exceptionFilter);
