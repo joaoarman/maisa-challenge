@@ -109,7 +109,7 @@ const cpfRules = [
 ]
 
 const goBack = () => {
-  router.push('/alunos')
+  router.push('/students')
 }
 
 const saveStudent = async () => {
@@ -122,7 +122,7 @@ const saveStudent = async () => {
     snackbar.value = true
     
     setTimeout(() => {
-      router.push('/alunos')
+      router.push('/students')
     }, 1000)
   } catch (error) {
     console.error('Erro ao salvar estudante:', error)

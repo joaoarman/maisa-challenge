@@ -19,7 +19,7 @@ const checkAuthentication = async () => {
     showLayout.value = route.path !== '/';
     
     if (route.path === '/' && initialized.value) {
-      router.push('/alunos');
+      router.push('/students');
     }
   } else {
    

@@ -132,13 +132,13 @@ onMounted(async () => {
     snackbar.value = true
     
     setTimeout(() => {
-      router.push('/alunos')
+      router.push('/students')
     }, 1500)
   }
 })
 
 const goBack = () => {
-  router.push('/alunos')
+  router.push('/students')
 }
 
 const updateStudent = async () => {
@@ -155,7 +155,7 @@ const updateStudent = async () => {
     snackbar.value = true
     
     setTimeout(() => {
-      router.push('/alunos')
+      router.push('/students')
     }, 1000)
   } catch (error) {
     console.error('Erro ao atualizar estudante:', error)

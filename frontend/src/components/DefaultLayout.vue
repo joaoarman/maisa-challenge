@@ -18,7 +18,7 @@ const menuItems = [
   {
     title: 'Alunos',
     icon: 'mdi-account-group',
-    to: '/alunos'
+    to: '/students'
   }
 ]
 

@@ -12,7 +12,7 @@ const showSnackbar = ref(false);
 
 onMounted(() => {
   if (AuthService.isAuthenticated()) {
-    router.push('/alunos');
+    router.push('/students');
   }
 });
 
@@ -29,7 +29,7 @@ const login = async () => {
   try {
     await AuthService.login(email.value, password.value);
     
-    router.push('/alunos');
+    router.push('/students');
   } catch (err) {
     error.value = 'Dados inválidos';
     showSnackbar.value = true;

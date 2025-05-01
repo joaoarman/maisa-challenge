@@ -7,19 +7,19 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/alunos',
+    path: '/students',
     name: 'Students',
     component: () => import('../views/Students.vue'),
     meta: { requiresAuth: true }
   },
   {
-    path: '/alunos/novo',
+    path: '/students/new',
     name: 'StudentCreate',
     component: () => import('../views/StudentCreate.vue'),
     meta: { requiresAuth: true }
   },
   {
-    path: '/alunos/:id/editar',
+    path: '/students/:id/edit',
     name: 'StudentEdit',
     component: () => import('../views/StudentEdit.vue'),
     meta: { requiresAuth: true }

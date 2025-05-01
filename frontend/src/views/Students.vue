@@ -120,11 +120,11 @@ const getAllStudents = async () => {
 }
 
 const navigateToCreate = () => {
-  router.push('/alunos/novo')
+  router.push('/students/new')
 }
 
 const navigateToEdit = (item) => {
-  router.push(`/alunos/${item.id}/editar`)
+  router.push(`/students/${item.id}/edit`)
 }
 
 const handleStudentDeleted = async () => {
