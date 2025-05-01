@@ -2,6 +2,11 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('student', null, { truncate: true, cascade: true })
+      .catch(error => {
+        console.log('Error cleaning student table or table is empty:', error.message);
+      });
+      
     const students = [];
 
     for (let i = 1; i <= 30; i++) {

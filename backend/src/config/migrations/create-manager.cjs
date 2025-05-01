@@ -2,6 +2,11 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
+    
+    await queryInterface.dropTable('manager', { force: true, cascade: true }).catch(error => {
+      console.log('Table manager does not exist or was successfully dropped');
+    });
+    
     await queryInterface.createTable('manager', {
       id: {
         type: Sequelize.INTEGER,

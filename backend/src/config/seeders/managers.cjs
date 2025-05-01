@@ -3,6 +3,11 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('manager', null, { truncate: true, cascade: true })
+      .catch(error => {
+        console.log('Error cleaning manager table or table is empty:', error.message);
+      });
+
     const saltRounds = 10;
     const adminPassword = await bcrypt.hash('admin123', saltRounds);
     const managerPassword = await bcrypt.hash('manager123', saltRounds);

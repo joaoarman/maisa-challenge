@@ -1,5 +1,5 @@
 import * as studentService from '../services/studentService.js';
-import { createStudentModel, updateStudentModel, deleteStudentModel } from '../models/Student.js';
+import { createStudentModel, updateStudentModel, deleteStudentModel, idModel } from '../models/Student.js';
 import { ZodError } from 'zod';
 
 export const getAllStudents = async (req, res, next) => {
@@ -69,7 +69,7 @@ export const updateStudent = async (req, res, next) => {
 
 export const deleteStudent = async (req, res, next) => {
     try {
-        const { id } = deleteStudentModel.parse(req.params.id);
+        const { id } = deleteStudentModel.parse({ id: req.params.id });
         
         await studentService.deleteStudent(id);
 

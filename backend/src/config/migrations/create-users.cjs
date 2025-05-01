@@ -2,6 +2,10 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
+    await queryInterface.dropTable('student', { force: true, cascade: true }).catch(error => {
+      console.log('Table student does not exist or was successfully dropped');
+    });
+    
     await queryInterface.createTable('student', {
       id: {
         type: Sequelize.INTEGER,
