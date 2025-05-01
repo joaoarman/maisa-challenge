@@ -5,7 +5,7 @@
       <v-btn
         color="primary"
         prepend-icon="mdi-plus"
-        @click="createDialog.open()"
+        @click="navigateToCreate()"
       >
         Novo Aluno
       </v-btn>
@@ -35,7 +35,7 @@
             small 
             class="mr-2" 
             :color="isAdmin ? 'warning' : 'grey'" 
-            @click="isAdmin ? updateDialog.open(item) : showPermissionDenied('editar')"
+            @click="isAdmin ? navigateToEdit(item) : showPermissionDenied('editar')"
           >
             mdi-pencil
           </v-icon>
@@ -50,8 +50,6 @@
       </v-data-table>
     </v-card>
 
-    <CreateDialog ref="createDialog" @saved="handleStudentSaved" />
-    <UpdateDialog ref="updateDialog" @updated="handleStudentUpdated" />
     <DeleteDialog ref="deleteDialog" @deleted="handleStudentDeleted" />
 
     <v-snackbar
@@ -67,17 +65,15 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import studentsService from '../services/studentsService'
 import authService from '../services/AuthService'
-import CreateDialog from '../components/student/CreateDialog.vue'
-import UpdateDialog from '../components/student/UpdateDialog.vue'
 import DeleteDialog from '../components/student/DeleteDialog.vue'
 
+const router = useRouter()
 const students = ref([])
 const loading = ref(true)
 const search = ref('')
-const createDialog = ref(null)
-const updateDialog = ref(null)
 const deleteDialog = ref(null)
 
 const snackbar = ref(false)
@@ -95,7 +91,6 @@ const showPermissionDenied = (action) => {
   snackbar.value = true;
 }
 
-// Cabeçalhos da tabela
 const headers = computed(() => {
   const baseHeaders = [
     { title: 'Nome', key: 'name', align: 'start', sortable: true },
@@ -125,12 +120,12 @@ const getAllStudents = async () => {
   }
 }
 
-const handleStudentSaved = async () => {
-  await getAllStudents()
+const navigateToCreate = () => {
+  router.push('/alunos/novo')
 }
 
-const handleStudentUpdated = async () => {
-  await getAllStudents()
+const navigateToEdit = (item) => {
+  router.push(`/alunos/${item.id}/editar`)
 }
 
 const handleStudentDeleted = async () => {
