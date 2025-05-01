@@ -10,7 +10,7 @@ const notifyAuthChange = () => {
 class AuthService {
   async login(email, password) {
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, {
+      const response = await axios.post(`${API_URL}/managers/login`, {
         email,
         password
       });
