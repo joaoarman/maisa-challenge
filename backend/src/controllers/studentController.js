@@ -1,5 +1,5 @@
 import * as studentService from '../services/studentService.js';
-import { createStudentModel, updateStudentModel } from '../models/Student.js';
+import { createStudentModel, updateStudentModel, deleteStudentModel } from '../models/Student.js';
 import { ZodError } from 'zod';
 
 export const getAllStudents = async (req, res, next) => {
@@ -17,12 +17,9 @@ export const getAllStudents = async (req, res, next) => {
 
 export const getStudentById = async (req, res, next) => {
   try {
-    const studentId = req.params.id;
-    if (!studentId) {
-      throw new AppError('Student ID is required', 400);
-    }
+    const { id } = idModel.parse({ id: req.params.id });
 
-    const student = await studentService.getStudentById(studentId);
+    const student = await studentService.getStudentById(id);
     res.status(200).json({
       success: true,
       data: student,
@@ -48,16 +45,18 @@ export const createStudent = async (req, res, next) => {
 
 export const updateStudent = async (req, res, next) => {
     try {
-        const studentId = req.params.id;
-        if (!studentId) {
-            return res.status(400).json({
-                success: false,
-                message: "Student ID is required"
-            });
-        }
-
-        const student = updateStudentModel.parse(req.body);
-        await studentService.updateStudent(studentId, student);
+        
+        const updateData = {
+            id: req.params.id,
+            ...req.body
+        };
+        
+        const validatedData = updateStudentModel.parse(updateData);
+        
+        await studentService.updateStudent(validatedData.id, {
+            name: validatedData.name, 
+            email: validatedData.email
+        });
 
         res.status(200).json({
             success: true,
@@ -70,15 +69,9 @@ export const updateStudent = async (req, res, next) => {
 
 export const deleteStudent = async (req, res, next) => {
     try {
-        const studentId = req.params.id;
-        if (!studentId) {
-            return res.status(400).json({
-                success: false,
-                message: "ID do aluno é obrigatório"
-            });
-        }
-
-        await studentService.deleteStudent(studentId);
+        const { id } = deleteStudentModel.parse(req.params.id);
+        
+        await studentService.deleteStudent(id);
 
         res.status(200).json({
             success: true,

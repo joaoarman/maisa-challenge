@@ -114,18 +114,14 @@ const emailRules = [
 
 onMounted(async () => {
   try {
-    console.log("ID do aluno recebido:", studentId);
     const response = await studentsService.getById(studentId)
     const studentData = response.data.data
 
-    // O ID vem da rota, não da resposta do backend
     student.id = studentId;
     student.name = studentData.name
     student.email = studentData.email
     student.ra = studentData.RA || studentData.ra
     student.cpf = studentData.cpf
-    
-    console.log("Dados do aluno carregados:", student);
     
     studentLoaded.value = true
     valid.value = true

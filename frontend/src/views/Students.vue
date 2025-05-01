@@ -112,7 +112,6 @@ const getAllStudents = async () => {
   try {
     const response = await studentsService.getAll()
     students.value = response.data.data
-    console.log('Dados dos alunos:', students.value)
   } catch (error) {
     console.error('Erro ao carregar alunos:', error)
   } finally {

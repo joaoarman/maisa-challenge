@@ -8,8 +8,17 @@ const createStudentModel = z.object({
 });
 
 const updateStudentModel = z.object({
+    id: z.string().min(1, { message: "ID é obrigatório" }),
     name: z.string().min(3).max(100),
     email: z.string().email()
 });
 
-export { createStudentModel, updateStudentModel };
+const deleteStudentModel = z.object({
+    id: z.string().min(1, { message: "ID do aluno é obrigatório" })
+});
+
+const idModel = z.object({
+    id: z.string().min(1, { message: "ID é obrigatório" })
+});
+
+export { createStudentModel, updateStudentModel, deleteStudentModel, idModel };
