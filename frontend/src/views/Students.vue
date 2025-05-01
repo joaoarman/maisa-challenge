@@ -31,10 +31,19 @@
         class="elevation-5"
       >
         <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="updateDialog.open(item)" color="warning">
+          <v-icon 
+            small 
+            class="mr-2" 
+            :color="isAdmin ? 'warning' : 'grey'" 
+            @click="isAdmin ? updateDialog.open(item) : showPermissionDenied('editar')"
+          >
             mdi-pencil
           </v-icon>
-          <v-icon small @click="deleteDialog.open(item)" color="red">
+          <v-icon 
+            small 
+            :color="isAdmin ? 'red' : 'grey'" 
+            @click="isAdmin ? deleteDialog.open(item) : showPermissionDenied('excluir')"
+          >
             mdi-delete
           </v-icon> 
         </template>
@@ -57,8 +66,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import studentsService from '../services/studentsService'
+import authService from '../services/AuthService'
 import CreateDialog from '../components/student/CreateDialog.vue'
 import UpdateDialog from '../components/student/UpdateDialog.vue'
 import DeleteDialog from '../components/student/DeleteDialog.vue'
@@ -70,19 +80,33 @@ const createDialog = ref(null)
 const updateDialog = ref(null)
 const deleteDialog = ref(null)
 
-// Snackbar
 const snackbar = ref(false)
 const snackbarMessage = ref('')
 const snackbarColor = ref('success')
 
+const isAdmin = computed(() => {
+  const currentUser = authService.getCurrentUser();
+  return currentUser && currentUser.isAdmin;
+})
+
+const showPermissionDenied = (action) => {
+  snackbarMessage.value = `Você não tem permissão para ${action} alunos.`;
+  snackbarColor.value = 'error';
+  snackbar.value = true;
+}
+
 // Cabeçalhos da tabela
-const headers = [
-  { title: 'Nome', key: 'name', align: 'start', sortable: true },
-  { title: 'RA', key: 'RA', align: 'start', sortable: true },
-  { title: 'CPF', key: 'cpf', align: 'start', sortable: true },
-  { title: 'Email', key: 'email', align: 'start', sortable: true },
-  { title: 'Ações', key: 'actions', sortable: false }
-]
+const headers = computed(() => {
+  const baseHeaders = [
+    { title: 'Nome', key: 'name', align: 'start', sortable: true },
+    { title: 'RA', key: 'RA', align: 'start', sortable: true },
+    { title: 'CPF', key: 'cpf', align: 'start', sortable: true },
+    { title: 'Email', key: 'email', align: 'start', sortable: true },
+    { title: 'Ações', key: 'actions', sortable: false }
+  ];
+  
+  return baseHeaders;
+})
 
 onMounted(async () => {
   await getAllStudents()
