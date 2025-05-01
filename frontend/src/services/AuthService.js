@@ -2,59 +2,60 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
 
-// Evento customizado para notificar mudanças na autenticação
 const notifyAuthChange = () => {
   window.dispatchEvent(new Event('auth-changed'));
 };
 
-class AuthService {
-  async login(email, password) {
-    try {
-      const response = await axios.post(`${API_URL}/managers/login`, {
-        email,
-        password
-      });
-      
-      // Salvar dados no localStorage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      // Notificar outros componentes sobre a mudança
-      notifyAuthChange();
-      
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-  
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    // Notificar outros componentes sobre a mudança
+const login = async (email, password) => {
+  try {
+    const response = await axios.post(`${API_URL}/managers/login`, {
+      email,
+      password
+    });
+    
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+    
     notifyAuthChange();
+    
+    return response.data;
+  } catch (error) {
+    throw error;
   }
-  
-  getCurrentUser() {
-    try {
-      const userStr = localStorage.getItem('user');
-      if (!userStr) return null;
-      return JSON.parse(userStr);
-    } catch (error) {
-      this.logout(); // Limpar dados corrompidos
-      return null;
-    }
-  }
-  
-  getToken() {
-    return localStorage.getItem('token');
-  }
-  
-  isAuthenticated() {
-    const hasToken = !!this.getToken();
-    const hasUser = !!this.getCurrentUser();
-    return hasToken && hasUser;
-  }
-}
+};
 
-export default new AuthService(); 
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+
+  notifyAuthChange();
+};
+
+const getCurrentUser = () => {
+  try {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) return null;
+    return JSON.parse(userStr);
+  } catch (error) {
+    logout();
+    return null;
+  }
+};
+
+const getToken = () => {
+  return localStorage.getItem('token');
+};
+
+const isAuthenticated = () => {
+  const hasToken = !!getToken();
+  const hasUser = !!getCurrentUser();
+  return hasToken && hasUser;
+};
+
+export default {
+  login,
+  logout,
+  getCurrentUser,
+  getToken,
+  isAuthenticated
+}; 
