@@ -9,8 +9,8 @@ module.exports = {
       });
 
     const saltRounds = 10;
-    const adminPassword = await bcrypt.hash('admin', saltRounds);
-    const managerPassword = await bcrypt.hash('naoadmin', saltRounds);
+    const adminPassword = await bcrypt.hash('admin123', saltRounds);
+    const managerPassword = await bcrypt.hash('naoadmin123', saltRounds);
 
     await queryInterface.bulkInsert('manager', [
       {
