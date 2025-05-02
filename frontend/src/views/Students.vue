@@ -11,6 +11,27 @@
       </v-btn>
     </div>
 
+    <div class="search-container mb-4">
+      <v-text-field
+        v-model="searchQuery"
+        label="Buscar por nome"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        density="comfortable"
+        hide-details
+        class="search-field"
+        @keyup.enter="handleSearch"
+      >
+        <template v-slot:append>
+          <v-btn
+            icon="mdi-magnify"
+            variant="text"
+            @click="handleSearch"
+          ></v-btn>
+        </template>
+      </v-text-field>
+    </div>
+
     <div class="table-container">
       <table class="custom-table">
         <thead>
@@ -105,6 +126,7 @@ const deleteDialog = ref(null)
 const currentPage = ref(parseInt(route.query.page) || 1)
 const totalStudents = ref(0)
 const itemsPerPage = 10
+const searchQuery = ref('')
 
 const snackbar = ref(false)
 const snackbarMessage = ref('')
@@ -155,7 +177,7 @@ const getAllStudents = async () => {
       router.push('/');
       return;
     }
-    const response = await studentsService.getAll(currentPage.value, itemsPerPage)
+    const response = await studentsService.getAll(currentPage.value, itemsPerPage, searchQuery.value)
     students.value = response.data.data
   } catch (error) {
     console.error('Erro ao carregar alunos:', error)
@@ -167,7 +189,16 @@ const getAllStudents = async () => {
   }
 }
 
-// Add watch for route.query.page changes
+const handleSearch = () => {
+  currentPage.value = 1
+  router.push({ query: { ...route.query, page: 1, search: searchQuery.value } })
+  getAllStudents()
+}
+
+watch(() => route.query.search, (newSearch) => {
+  searchQuery.value = newSearch || ''
+})
+
 watch(() => route.query.page, (newPage) => {
   const page = parseInt(newPage) || 1
   if (currentPage.value !== page) {
@@ -259,5 +290,14 @@ const handleStudentDeleted = async () => {
 .page-info {
   margin: 0 8px;
   color: rgba(0, 0, 0, 0.87);
+}
+
+.search-container {
+  max-width: 400px;
+}
+
+.search-field {
+  background: white;
+  border-radius: 4px;
 }
 </style> 

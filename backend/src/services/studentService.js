@@ -5,8 +5,8 @@ export const getTotalStudents = async () => {
     return { total };
 };
 
-export const getAllStudents = async (page = 1, limit = 10) => {
-  const students = await studentRepository.getAllStudents(page, limit);
+export const getAllStudents = async (page = 1, limit = 10, search = '') => {
+  const students = await studentRepository.getAllStudents(page, limit, search);
   return students;
 };
 

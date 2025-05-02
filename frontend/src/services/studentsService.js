@@ -6,11 +6,12 @@ const studentsService = {
     return httpClient.get('/students/total')
   },
 
-  getAll(page = 1, limit = 10) {
+  getAll(page = 1, limit = 10, search = '') {
     return httpClient.get('/students', {
       params: {
         page,
-        limit
+        limit,
+        search
       }
     })
   },

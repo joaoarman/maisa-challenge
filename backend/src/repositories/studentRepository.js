@@ -15,11 +15,13 @@ export const getTotalStudents = async () => {
     }
 };
 
-export const getAllStudents = async (page = 1, limit = 10) => {
+export const getAllStudents = async (page = 1, limit = 10, search = '') => {
     try {
         const offset = (page - 1) * limit;
+        const searchCondition = search ? 'AND student.name LIKE ?' : '';
+        const searchValue = search ? `%${search}%` : null;
 
-        const [rows] = await db.query(`
+        const query = `
             SELECT 
                 student.id,
                 student.name, 
@@ -28,8 +30,13 @@ export const getAllStudents = async (page = 1, limit = 10) => {
                 student.email
             FROM student
             WHERE isActive = 1
+            ${searchCondition}
             LIMIT ? OFFSET ?
-        `, [limit, offset]);
+        `;
+
+        const params = search ? [searchValue, limit, offset] : [limit, offset];
+
+        const [rows] = await db.query(query, params);
 
         return rows;
     } catch (error) {
