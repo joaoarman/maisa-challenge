@@ -1,5 +1,5 @@
 import * as managerService from '../services/managerService.js';
-import { loginModel } from '../models/Manager.js';
+import loginModel  from '../models/Manager.js';
 
 export const login = async (req, res, next) => {
   try {
