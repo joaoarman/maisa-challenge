@@ -10,8 +10,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
-
 # Cria um script de inicialização
 RUN echo '#!/bin/sh\n\
 if [ ! -f /app/.migrations-done ]; then\n\
