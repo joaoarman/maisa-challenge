@@ -5,8 +5,9 @@ import { adminRequired } from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 router.get('/', studentController.getAllStudents);
-router.get('/:id', studentController.getStudentById);
+router.get('/total', studentController.getTotalStudents);
 router.post('/', studentController.createStudent);
+router.get('/:id', studentController.getStudentById);
 router.put('/:id', adminRequired, studentController.updateStudent);
 router.patch('/:id', adminRequired, studentController.deleteStudent);
 

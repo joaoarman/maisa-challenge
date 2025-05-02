@@ -138,7 +138,8 @@ onMounted(async () => {
 })
 
 const goBack = () => {
-  router.push('/students')
+  const page = route.query.page || 1
+  router.push(`/students?page=${page}`)
 }
 
 const updateStudent = async () => {
@@ -154,8 +155,9 @@ const updateStudent = async () => {
     snackbarColor.value = 'success'
     snackbar.value = true
     
+    const page = route.query.page || 1
     setTimeout(() => {
-      router.push('/students')
+      router.push(`/students?page=${page}`)
     }, 1000)
   } catch (error) {
     console.error('Erro ao atualizar estudante:', error)

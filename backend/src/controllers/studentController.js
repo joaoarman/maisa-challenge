@@ -2,9 +2,39 @@ import * as studentService from '../services/studentService.js';
 import { createStudentModel, updateStudentModel, deleteStudentModel, idModel } from '../models/Student.js';
 import { ZodError } from 'zod';
 
+export const getTotalStudents = async (req, res, next) => {
+  try {
+    const result = await studentService.getTotalStudents();
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: 'Total de alunos recuperado com sucesso'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getAllStudents = async (req, res, next) => {
   try {
-    const students = await studentService.getAllStudents();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    if (page < 1) {
+      return res.status(400).json({
+        success: false,
+        message: 'Page number must be greater than 0'
+      });
+    }
+
+    if (limit < 1 || limit > 100) {
+      return res.status(400).json({
+        success: false,
+        message: 'Limit must be between 1 and 100'
+      });
+    }
+
+    const students = await studentService.getAllStudents(page, limit);
     res.status(200).json({
       success: true,
       data: students,

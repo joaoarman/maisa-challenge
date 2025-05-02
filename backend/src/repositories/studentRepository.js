@@ -2,8 +2,23 @@ import db from '../config/connection.js';
 import { AppError } from '../errors/AppError.js';
 import { ERRORS } from '../errors/Errors.js';
 
-export const getAllStudents = async () => {
+export const getTotalStudents = async () => {
     try {
+        const [totalRows] = await db.query(`
+            SELECT COUNT(*) as total
+            FROM student
+            WHERE isActive = 1
+        `);
+        return totalRows[0].total;
+    } catch (error) {
+        throw new AppError('Erro ao buscar total de alunos', 500, ERRORS.INTERNAL_SERVER_ERROR);
+    }
+};
+
+export const getAllStudents = async (page = 1, limit = 10) => {
+    try {
+        const offset = (page - 1) * limit;
+
         const [rows] = await db.query(`
             SELECT 
                 student.id,
@@ -12,9 +27,9 @@ export const getAllStudents = async () => {
                 student.cpf, 
                 student.email
             FROM student
-            WHERE 
-                isActive = 1
-        `);
+            WHERE isActive = 1
+            LIMIT ? OFFSET ?
+        `, [limit, offset]);
 
         return rows;
     } catch (error) {

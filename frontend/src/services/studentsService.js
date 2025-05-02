@@ -2,8 +2,17 @@ import httpClient from './HttpService'
 
 const studentsService = {
 
-  getAll() {
-    return httpClient.get('/students')
+  getTotal() {
+    return httpClient.get('/students/total')
+  },
+
+  getAll(page = 1, limit = 10) {
+    return httpClient.get('/students', {
+      params: {
+        page,
+        limit
+      }
+    })
   },
 
   getById(id) {

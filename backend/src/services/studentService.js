@@ -1,7 +1,12 @@
 import * as studentRepository from '../repositories/studentRepository.js';
 
-export const getAllStudents = async () => {
-  const students = await studentRepository.getAllStudents();
+export const getTotalStudents = async () => {
+    const total = await studentRepository.getTotalStudents();
+    return { total };
+};
+
+export const getAllStudents = async (page = 1, limit = 10) => {
+  const students = await studentRepository.getAllStudents(page, limit);
   return students;
 };
 
