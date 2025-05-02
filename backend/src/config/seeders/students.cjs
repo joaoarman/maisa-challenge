@@ -17,7 +17,7 @@ module.exports = {
         email: `student${i}@example.com`,                            
         isActive: 1,
         createdOn: new Date(),                                       
-        updatadeOn: new Date()
+        updatedOn: new Date()
       });
     }
 

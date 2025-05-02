@@ -21,13 +21,13 @@ module.exports = {
         type: Sequelize.STRING(11),
         allowNull: false
       },
-      name: {
+      email: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      email: {
+      name: {
         type: Sequelize.STRING(100),
-        allowNull: true
+        allowNull: false
       },
       isActive: {
         type: Sequelize.TINYINT,
@@ -39,17 +39,29 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatadeOn: {
+      updatedOn: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
       }
-    }, {
-      indexes: [
-        { unique: true, fields: ['ra'],    name: 'ra_UNIQUE'    },
-        { unique: true, fields: ['cpf'],   name: 'cpf_UNIQUE'   },
-        { unique: true, fields: ['email'], name: 'email_UNIQUE' }
-      ]
+    });
+
+    await queryInterface.addConstraint('student', {
+      fields: ['ra'],
+      type: 'unique',
+      name: 'ra_UNIQUE'
+    });
+
+    await queryInterface.addConstraint('student', {
+      fields: ['cpf'],
+      type: 'unique',
+      name: 'cpf_UNIQUE'
+    });
+
+    await queryInterface.addConstraint('student', {
+      fields: ['email'],
+      type: 'unique',
+      name: 'email_UNIQUE'
     });
   },
 
