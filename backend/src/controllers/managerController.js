@@ -10,11 +10,12 @@ export const login = async (req, res, next) => {
       validatedData.password
     );
     
-    return res.status(200).json(result);
+    return res.status(200).json({
+      success: true,
+      data: result,
+      message: 'Login realizado com sucesso'
+    });
   } catch (error) {
-    if (error.message === 'Invalid credentials') {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
     next(error);
   }
 };

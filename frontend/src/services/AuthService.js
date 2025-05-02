@@ -13,8 +13,10 @@ const login = async (email, password) => {
       password
     });
     
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('user', JSON.stringify(response.data.user));
+    const { token, user } = response.data.data;
+    
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
     
     notifyAuthChange();
     

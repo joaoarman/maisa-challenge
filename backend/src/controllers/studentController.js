@@ -1,5 +1,5 @@
 import * as studentService from '../services/studentService.js';
-import { createStudentModel, updateStudentModel, deleteStudentModel, idModel } from '../models/Student.js';
+import { createStudentModel, updateStudentModel, deleteStudentModel, idModel, paginationModel } from '../models/Student.js';
 import { ZodError } from 'zod';
 
 export const getTotalStudents = async (req, res, next) => {
@@ -17,29 +17,17 @@ export const getTotalStudents = async (req, res, next) => {
 
 export const getAllStudents = async (req, res, next) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const search = req.query.search || '';
-
-    if (page < 1) {
-      return res.status(400).json({
-        success: false,
-        message: 'Page number must be greater than 0'
-      });
-    }
-
-    if (limit < 1 || limit > 100) {
-      return res.status(400).json({
-        success: false,
-        message: 'Limit must be between 1 and 100'
-      });
-    }
+    const { page, limit, search } = paginationModel.parse({
+      page: parseInt(req.query.page) || 1,
+      limit: parseInt(req.query.limit) || 10,
+      search: req.query.search || ''
+    });
 
     const students = await studentService.getAllStudents(page, limit, search);
     res.status(200).json({
       success: true,
       data: students,
-      message: 'Students retrieved successfully'
+      message: 'Alunos recuperados com sucesso'
     });
   } catch (error) {
     next(error);
@@ -54,7 +42,7 @@ export const getStudentById = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: student,
-      message: 'Student retrieved successfully'
+      message: 'Aluno recuperado com sucesso'
     });
   } catch (error) {
     next(error);
@@ -76,7 +64,6 @@ export const createStudent = async (req, res, next) => {
 
 export const updateStudent = async (req, res, next) => {
     try {
-        
         const updateData = {
             id: req.params.id,
             ...req.body
@@ -91,7 +78,7 @@ export const updateStudent = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Aluno atualizado com sucesso"
+            message: 'Aluno atualizado com sucesso'
         });
     } catch (error) {
         next(error);
@@ -106,7 +93,7 @@ export const deleteStudent = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Aluno deletado com sucesso"
+            message: 'Aluno excluído com sucesso'
         });
     } catch (error) {
         next(error);

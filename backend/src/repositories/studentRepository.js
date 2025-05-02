@@ -76,7 +76,8 @@ export const createStudent = async (student) => {
     } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
 
-            // Evita consultar o banco de dados para cada tipo de erro
+            // Pensei em fazer chamada para o banco para cada tipo de erro,
+            // mas isso seria muito custoso, achei melhor fazer as verificações pelas strings do error.message
             if(error.message.toLowerCase().includes('cpf_unique')) {
                 throw new AppError('CPF já cadastrado', 409, ERRORS.CPF_DUPLICATED);
             }
