@@ -43,6 +43,8 @@
                   label="CPF"
                   hint="Apenas números"
                   required
+                  maxlength="11"
+                  @input="handleCpfInput"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -130,5 +132,9 @@ const saveStudent = async () => {
     snackbarColor.value = 'error'
     snackbar.value = true
   }
+}
+
+const handleCpfInput = (event) => {
+  student.cpf = event.target.value.replace(/\D/g, '')
 }
 </script> 
