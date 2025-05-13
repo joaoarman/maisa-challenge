@@ -31,7 +31,8 @@ describe('Student Controller', () => {
   beforeEach(() => {
     mockReq = {
       params: {},
-      body: {}
+      body: {},
+      query: {}
     };
     mockRes = {
       status: jest.fn().mockReturnThis(),
@@ -49,20 +50,32 @@ describe('Student Controller', () => {
         { id: 2, name: 'Jane Doe', email: 'jane@example.com' }
       ];
 
+      mockReq.query = {
+        page: '1',
+        limit: '10',
+        search: ''
+      };
+
       mockGetAllStudents.mockResolvedValue(mockStudents);
 
       await studentController.getAllStudents(mockReq, mockRes, mockNext);
 
-      expect(mockGetAllStudents).toHaveBeenCalled();
+      expect(mockGetAllStudents).toHaveBeenCalledWith(1, 10, '');
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
         data: mockStudents,
-        message: 'Students retrieved successfully'
+        message: 'Alunos recuperados com sucesso'
       });
     });
 
     it('should handle errors and call next', async () => {
+      mockReq.query = {
+        page: '1',
+        limit: '10',
+        search: ''
+      };
+
       const mockError = new Error('Erro ao buscar alunos');
       mockGetAllStudents.mockRejectedValue(mockError);
 
@@ -86,7 +99,7 @@ describe('Student Controller', () => {
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
         data: mockStudent,
-        message: 'Student retrieved successfully'
+        message: 'Aluno recuperado com sucesso'
       });
     });
   });
@@ -205,7 +218,7 @@ describe('Student Controller', () => {
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: 'Aluno deletado com sucesso'
+        message: 'Aluno excluído com sucesso'
       });
     });
 
